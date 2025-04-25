@@ -1132,7 +1132,7 @@ Reboot Device (this may cause the call to drop so arrange to call them back in 2
      document.getElementById("output").innerText="";
      document.getElementById("copyContainer").style.display="none";
     const selected = document.getElementById('templateSelect').value;
-    clearAllForms(); // Add this line
+    clearAllForms(); // clears all template forms whenever toggling (to ensure no stale data is left over by mistake)
 
     // List of all form elements
     const forms = {
