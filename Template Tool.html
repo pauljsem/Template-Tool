@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Template Toggle Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #0ac49c;
+    font-family: Arial, sans-serif;
+    color: #000000;
+    
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 6px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 80px;
+    }
+    #output {
+      white-space: pre-wrap;
+      margin-top: 40px;
+      border-top: 2px solid #000;
+      padding-top: 20px;
+      font-family: monospace;
+    }
+    .button-container {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    .form-container {
+      display: none;
+    }
+     h3 {
+    color: #0ac49c;
+  }
+    label {
+    display: block;
+    margin-top: 10px;
+    color: black;
+  }
+  input, textarea, select {
+   
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+    input:focus, textarea:focus, select:focus {
+    border-color: #0ac49c;
+    outline: none;
+    box-shadow: 0 0 5px #0ac49c;
+  }
+  h2 {
+    text-align: center;
+  }
+  </style>
+</head>
+<body>
+
+  <h2><strong>ServiceNow Templates</strong></h2>
+  <p>Please select a template form below:</p>
+
+  <!-- Dropdown to choose template -->
+  
+  <select id="templateSelect" onchange="toggleTemplate()">
+    <option value="none" selected="">----Select a template----</option>
+    <option value="title" disabled>REQUEST/TASK TEMLPATES:</option>
+    <option value="2FA">1: 2FA Template</option>
+    <option value="myChart">2: MyChart Activation Template</option>
+    <option value="thirdTemplate">3: MyChart General Template</option>
+    <option value="myChartPWReset">4: MyChart PW Reset Template</option>
+    <option value="myTimeREQ">5:MyTime REQUEST Template</option>
+    <option value= "taskTemplate">6: Task Template</option>
+    <option disabled>────────────────────</option>
+    <option value="title2" disabled>INCIDENT TEMPLATES:</option>
+    <option value="techTemplate">1: Tech Template</option>
+    <option value="clinicalTemplate">2: Clinical Template</option>
+    <option value="2FAincTemplate">3: 2FA Template (INC)</option>
+    <option value= "IAndMeINC">4: I&Me Template (INC)</option>
+    <option value="callTransfer">5: Call Transfer Template</option>
+    <option value="phoneLines">6: Phone Line Issues Template</option>
+    
+      <option value="CitrixTemplate">8: Citrix Reset Template</option>
+      <option value="myTimeINC">9: MyTime Template (INC)</option>
+      <option value="wrongPT">10: Wrong PT Admitted Template</option>
+       <option disabled>────────────────────</option>
+       <option value="title3" disabled>GENERAL TEMPLATES (INC or TASK):</option>
+      <option value="statusCheck">1: Status Check Template</option>
+       <option value="ADpwReset">2: AD Password Reset Template</option>
+  </select>
+
+  <!-- 2FA Template Form -->
+  <div id="twoFAForm" class="form-container">
+    <form id="templateForm1" onsubmit="event.preventDefault(); generateOutputTemplate1(); this.reset();">
+      <label>Patient's Name (first &amp; last):
+        <input type="text" id="sn_name" required>
+      </label>
+
+      <label>Phone Number:
+        <input type="text" id="sn_phone" required>
+      </label>
+
+      <label>Was Verification completed (DOB, last of SSN &amp; mailing address? (Y/N)
+        <small>(must request email if patient refuses to provide SSN info)</small>
+        <input type="text" id="sn_verification" required>
+      </label>
+
+      <label>Verified Email? (Y/N):
+        <input type="text" id="sn_emailVerified" required>
+      </label>
+
+      <label>Check Junk/Spam folder? (Y/N):
+        <input type="text" id="sn_junkCheck" required>
+      </label>
+
+      <label>Was the Patient able to receive 2FA code? (Y/N):
+        <input type="text" id="sn_received2fa" required>
+      </label>
+
+      <label>Disable 2FA? (Y/N):
+        <input type="text" id="sn_disable2fa" required>
+      </label>
+
+      <label>Did the Patient successfully was able to log in after receiving 2FA code? (Y/N):
+        <input type="text" id="sn_successLogin" required>
+      </label>
+
+      <label>If no - why?
+        <textarea id="sn_reason" required></textarea>
+      </label>
+
+      <div class="button-container">
+        <button type="submit" id="generateOutputButton" onclick="=showCopyButton();">Generate Output</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- MyChart Activation Template Form -->
+  <div id="myChartForm" class="form-container">
+    <form id="templateForm2" onsubmit="event.preventDefault(); generateOutputTemplate2(); this.reset();">
+      <label>Patient's Name (first &amp; last):
+        <input type="text" id="mc_name" required>
+      </label>
+
+      <label>Phone Number:
+        <input type="text" id="mc_phone" required>
+      </label>
+
+      <!-- Static section of the template -->
+      <p>--------------What is the issue?----------------</p>
+      <p>New activation of patient account</p>
+      <p>----------------Steps to Resolve----------------</p>
+
+      <label>Was verification completed (DOB, last 4 of SSN &amp; mailing address? (Y/N):
+        <small>(Must request email if patient refuses to provide SSN info)</small>
+        <input type="text" id="mc_verification" required>
+      </label>
+
+      <label>Was Activation code generated and given to the patient? (Y/N):
+        <input type="text" id="mc_activation" required>
+      </label>
+
+      <label>Was the patient able to successfully log into their MyChart account? (Y/N):
+        <input type="text" id="mc_login" required>
+      </label>
+
+      <label>KB used:
+        <input type="text" id="mc_kb" required>
+      </label>
+
+      <p>Please note if the patient is not receiving the MFA code, you will need to create an INC ticket instead.</p>
+
+      <div class="button-container">
+        <button type="submit">Generate Output</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- MyChart General Template Form -->
+  <div id="thirdTemplateForm" class="form-container">
+    <form id="templateForm3" onsubmit="event.preventDefault(); generateOutputTemplate3(); this.reset();">
+      <label>Patient's Name (first &amp; last):
+        <input type="text" id="t3_name" required>
+      </label>
+
+      <label>MRN:
+        <input type="text" id="t3_mrn" required>
+      </label>
+
+      <label>DOB:
+        <input type="text" id="t3_dob" required>
+      </label>
+
+      <label>I&amp;M ID:
+        <input type="text" id="t3_imid" required>
+      </label>
+
+      <label>Verified SSN Y/N:
+        <input type="text" id="t3_verified_ssn" required>
+      </label>
+
+      <p>--------------What is the issue?----------------</p>
+      <label>
+        <textarea id="t3_issue" required placeholder="Describe the issue here..."></textarea>
+      </label>
+
+      <p>----------------Steps to Resolve----------------</p>
+      <label>
+        <textarea id="t3_steps" required placeholder="Enter the steps to resolve here..."></textarea>
+      </label>
+
+      <p>------------------Additional Q--------------------</p>
+      
+      <label>Who is your provider?
+        <input type="text" id="t3_provider" required>
+      </label>
+
+      <label>When was your last visit?
+        <input type="text" id="t3_last_visit" required>
+      </label>
+
+      <label>How long have you been seeing this provider?
+        <input type="text" id="t3_duration" required>
+      </label>
+
+      <label>Was this an ER visit, Clinic visit, or hospital stay?
+        <input type="text" id="t3_visit_type" required>
+      </label>
+
+      <label>Who is this affecting?
+        <input type="text" id="t3_affecting" required>
+      </label>
+
+      <label>When did this start?
+        <input type="text" id="t3_start" required>
+      </label>
+
+      <label>Did this work before?
+        <input type="text" id="t3_worked_before" required>
+      </label>
+
+      <label>Has anything changed since it last worked?
+        <input type="text" id="t3_changed" required>
+      </label>
+
+      <label>List any error messages:
+        <input type="text" id="t3_error_msg" required>
+      </label>
+
+      <label>Verification completed (DOB, last 4 of SSN &amp; mailing address? (Y/N):
+        <small>(Must request email if patient refuses to provide SSN info)</small>
+        <input type="text" id="t3_verification" required>
+      </label>
+
+      <label>Patient's Phone Number:
+        <input type="text" id="t3_phone" required>
+      </label>
+
+      <label>Alternative Phone Number:
+        <input type="text" id="t3_alt_phone" required>
+      </label>
+
+      <label>Email:
+        <input type="text" id="t3_email" required>
+      </label>
+
+      <label>Requested callback? (Y/N):
+        <input type="text" id="t3_callback" required>
+      </label>
+
+      <div class="button-container">
+        <button type="submit">Generate Output</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- MyChart PW Reset Template Form -->
+  <div id="myChartPWResetForm" class="form-container">
+    <form id="templateForm4" onsubmit="event.preventDefault(); generateOutputTemplate4(); this.reset();">
+      <label>Patient's Name (first &amp; last):
+        <input type="text" id="pw_name" required>
+      </label>
+
+      <label>Phone number:
+        <input type="text" id="pw_phone" required>
+      </label>
+
+      <label>Was Verification completed (DOB, last 4 of SSN &amp; mailing address? (Y/N):
+        <small>(Must request email if patient refuses to provide SSN info)</small>
+        <input type="text" id="pw_verification" required>
+      </label>
+
+      <label>Did you provide the password constraint requirements (Y/N)?
+        <input type="text" id="pw_constraints" required>
+      </label>
+
+      <label>Was the Patient able to successfully change their password and log in? (Y/N):
+        <input type="text" id="pw_changed" required>
+      </label>
+
+      <label>If no - why?
+        <textarea id="pw_reason" required></textarea>
+      </label>
+
+      <div class="button-container">
+        <button type="submit">Generate Output</button>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- myTime REQUEST Template Form -->
+  <div id="myTimeRequestForm" class="form-container">
+  <form id="templateFormMyTime" onsubmit="event.preventDefault(); generateOutputMyTime(); this.reset();">
+    <label>Caregiver Name:
+      <input type="text" id="mt_name" required>
+    </label>
+
+    <label>Caregiver ID:
+      <input type="text" id="mt_caregiver_id" required>
+    </label>
+
+    <label>Employee ID (800#):
+      <input type="text" id="mt_employee_id" required>
+    </label>
+
+    <label>Email Address:
+      <input type="email" id="mt_email" required>
+    </label>
+
+    <label>Phone Number:
+      <input type="text" id="mt_phone" required>
+    </label>
+
+    <label>Best contact number:
+      <input type="text" id="mt_best_contact" required>
+    </label>
+
+    <label>Best time to contact:
+      <input type="text" id="mt_best_time" required>
+    </label>
+
+    <label>Detailed description of request:
+      <textarea id="mt_description" required></textarea>
+    </label>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+
+<div id="myTimeRequestForm" class="form-container">
+  <form id="templateFormMyTime" onsubmit="event.preventDefault(); generateOutputMyTime(); this.reset();">
+    <label>Caregiver Name:
+      <input type="text" id="mt_name" required>
+    </label>
+
+    <label>Caregiver ID:
+      <input type="text" id="mt_caregiver_id" required>
+    </label>
+
+    <label>Employee ID (800#):
+      <input type="text" id="mt_employee_id" required>
+    </label>
+
+    <label>Email Address:
+      <input type="email" id="mt_email" required>
+    </label>
+
+    <label>Phone Number:
+      <input type="text" id="mt_phone" required>
+    </label>
+
+    <label>Best contact number:
+      <input type="text" id="mt_best_contact" required>
+    </label>
+
+    <label>Best time to contact:
+      <input type="text" id="mt_best_time" required>
+    </label>
+
+    <label>Detailed description of request:
+      <textarea id="mt_description" required></textarea>
+    </label>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+
+
+  <!-- Task Template Form -->
+   
+  <div id = "taskTemplateForm" class="form-container">
+     <form id="templateForm6" onsubmit="event.preventDefault(); generateOutputTemplate6(); this.reset();">
+    <p>------------Caller Info (Must verify with caller, not copied from S-Now )------------------</p>
+     <label>Phone Number:
+        <input type="text" id="taskPhone" required>
+      </label>
+      <label>
+      Location/Dept/Floor/Suit:<input type="text" id="taskLocation" required>
+      </label>
+      <p> -------------------------------What is being Requested? ------------------------------</p>
+
+      <label>What application/File/access is being requested?:
+        <input type="text" id="taskRequest" required>
+      </label>
+      <label>Why do they need this request?:
+        <input type="text" id="taskWhy" required>
+      </label>
+      <label>When do they need this request done?:
+        <input type="text" id="taskWhen" required>
+      </label>
+       <label>Who is the request for? (The caller? Or someone else?)
+        <input type="text" id="taskWho" required>
+      </label>
+       <label>
+Does this request require supervisor approval, if so, who is the supervisor?
+        <input type="text" id="taskApproval" required>
+      </label>
+       <label>Is there someone with the same access that can be mirrored? If so, who?
+        <input type="text" id="taskMirror" required>
+      </label>
+      
+       <label>What KB was used:
+        <input type="text" id="taskKB" required>
+      </label>
+      <div class="button-container">   <button type="submit">Generate Output</button> </div>
+    </form>
+</div>
+
+<!-- Tech Template Form -->
+<div id="techTemplateForm" class="form-container">
+  <form id="templateForm7" onsubmit="event.preventDefault(); generateOutputTemplate7(); this.reset();">
+    <p>----------------------  Caregiver Info (must verify with caller, do not copy from S-Now)  ---------------------</p>
+    <label>Caregiver Name:
+      <input type="text" id="cg_name" required>
+    </label>
+    <label>User ID &/or 8000# (8000 # must be included for Kronos):
+      <input type="text" id="cg_userId" required>
+    </label>
+    <label>Best call back number:
+      <input type="text" id="cg_callbackNumber" required>
+    </label>
+    <label>Best call back day & time:
+      <input type="text" id="cg_callbackTime" required>
+    </label>
+    <label>Location/Dept/floor/Room:
+      <input type="text" id="cg_location" required>
+    </label>
+    <label>PCID/Device Name:
+      <input type="text" id="cg_device" required>
+    </label>
+    <label>Fax number if applicable:
+      <input type="text" id="cg_fax" required>
+    </label>
+
+    <label>Name of caller if calling on behalf of:
+      <input type="text" id="cg_callerName" required>
+    </label>
+    <label>Caller's phone number if calling on behalf of:
+      <input type="text" id="cg_callerPhone" required>
+    </label>
+
+    <p>-------------------------  Detailed Reason for Call  -------------------------</p>
+    <textarea id="cg_reasonDetail" required></textarea>
+
+    <p>---------------------- Required Questions ---------------------</p>
+    <label>Who is this affecting and how many caregivers are currently affected?
+      <input type="text" id="cg_affected" required>
+    </label>
+    <label>Has the caregiver attempted anything to correct the issue, such as rebooting?
+      <input type="text" id="cg_triedSolutions" required>
+    </label>
+    <label>When did this start/ how long has it been occurring?
+      <input type="text" id="cg_startTime" required>
+    </label>
+    <label>What was your workflow / What were you working on when the issue occurred (application name)?
+      <input type="text" id="cg_workflow" required>
+    </label>
+    <label>Has anything changed since it last worked?
+      <input type="text" id="cg_changes" required>
+    </label>
+    <label>Have screenshots been gathered and attached?
+      <input type="text" id="cg_screenshots" required>
+    </label>
+    <label>Are there any error messages? IF so, what did it say?
+      <input type="text" id="cg_errors" required>
+    </label>
+    <label>Was KB attached and TS steps\templates followed and used?
+      <input type="text" id="cg_kbSteps" required>
+    </label>
+
+    <p>------------------------   Detailed troubleshooting Steps taken ----------------------------------</p>
+    <textarea id="cg_troubleshoot" required></textarea>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+<!-- Clinical Template Form -->
+<div id="clinicalTemplateForm" class="form-container">
+  <form id="templateFormClinical" onsubmit="event.preventDefault(); generateOutputTemplateClinical(); this.reset();">
+    <p>---------------------- Caregiver Info (must verify with caller, do not copy from S-Now) ---------------------</p>
+    <label>Caregiver Name:
+      <input type="text" id="clinical_caregiverName" required>
+    </label>
+    <label>User ID:
+      <input type="text" id="clinical_userId" required>
+    </label>
+    <label>Best call back number:
+      <input type="text" id="clinical_callbackNumber" required>
+    </label>
+    <label>Best call back day & time:
+      <input type="text" id="clinical_callbackTime" required>
+    </label>
+    <label>Job Description/Role:
+      <input type="text" id="clinical_jobDescription" required>
+    </label>
+    <label>Location/Dept/floor/Room:
+      <input type="text" id="clinical_location" required>
+    </label>
+    <label>PCID/Device Name:
+      <input type="text" id="clinical_device" required>
+    </label>
+    <label>Epic Login Dept:
+      <input type="text" id="clinical_epicDept" required>
+    </label>
+
+    <label>Name of caller if calling on behalf of:
+      <input type="text" id="clinical_callerName" required>
+    </label>
+    <label>Caller's phone number if calling on behalf of:
+      <input type="text" id="clinical_callerPhone" required>
+    </label>
+
+    <p>------------------------- Detailed Reason for Call -------------------------</p>
+    <textarea id="clinical_reasonDetail" required></textarea>
+
+    <p>---------------------- Required Questions ---------------------</p>
+    <label>Who is this affecting and how many caregivers are currently affected?
+      <input type="text" id="clinical_affected" required>
+    </label>
+    <label>Has the caregiver attempted anything to correct the issue, such as rebooting?
+      <input type="text" id="clinical_triedSolutions" required>
+    </label>
+    <label>When did this start/ how long has it been occurring?
+      <input type="text" id="clinical_startTime" required>
+    </label>
+    <label>What was your workflow / What were you working on when the issue occurred (application name)?
+      <input type="text" id="clinical_workflow" required>
+    </label>
+    <label>Have screenshots been gathered and attached?
+      <input type="text" id="clinical_screenshots" required>
+    </label>
+    <label>Are there any error messages? IF so, what did it say?
+      <input type="text" id="clinical_errors" required>
+    </label>
+    <label>Is there a specific person to mirror?
+      <input type="text" id="clinical_mirror" required>
+    </label>
+    <label>Was KB attached and TS steps/templates followed and used?
+      <input type="text" id="clinical_kbSteps" required>
+    </label>
+
+    <p>------------------------ Detailed troubleshooting Steps taken ----------------------------------</p>
+    <textarea id="clinical_troubleshoot" required></textarea>
+
+    <p>------------------------ Clinical Specific Info ----------------------------------</p>
+    <label>Patient Name:
+      <input type="text" id="clinical_patientName" required>
+    </label>
+    <label>DOB:
+      <input type="text" id="clinical_dob" required>
+    </label>
+    <label>MRN:
+      <input type="text" id="clinical_mrn" required>
+    </label>
+    <label>CSN:
+      <input type="text" id="clinical_csn" required>
+    </label>
+    <label>DOS:
+      <input type="text" id="clinical_dos" required>
+    </label>
+    <label>Order Number (if applicable):
+      <input type="text" id="clinical_orderNumber">
+    </label>
+    <label>Accession Number (if applicable):
+      <input type="text" id="clinical_accessionNumber">
+    </label>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+<!-- 2FA Template Form -->
+<div id="twoFATemplateForm" class="form-container">
+  <form id="templateForm2FA" onsubmit="event.preventDefault(); generateOutputTemplate2FA();">
+    <p>---------------------- Patient Info ---------------------</p>
+    <label>Patient's Name (first & last):
+      <input type="text" id="2FA_patientName" required>
+    </label>
+    <label>Phone Number:
+      <input type="text" id="2FA_phoneNumber" required>
+    </label>
+    <label>MRN:
+      <input type="text" id="2FA_mrn" required>
+    </label>
+    <label>Was Verification completed (DOB, SSN, email & mailing address? (Y/N):
+      <input type="text" id="2FA_verification" required>
+    </label>
+
+    <p>---------------------- Device/Connection Info ---------------------</p>
+    <label>Is Patient on a cell phone/tablet or Desktop/Laptop?
+      <input type="text" id="2FA_deviceType" required>
+    </label>
+    <label>Who is their ISP or Wireless Provider?
+      <input type="text" id="2FA_isp" required>
+    </label>
+    <label>What kind of phone/tablet are they using?
+      <input type="text" id="2FA_deviceModel" required>
+    </label>
+    <label>What browser are they using?
+      <input type="text" id="2FA_browser" required>
+    </label>
+
+    <p>---------------------- 2FA Issues ---------------------</p>
+    <label>Check Junk/Spam folder? (Y/N):
+      <input type="text" id="2FA_spamCheck" required>
+    </label>
+    <label>Was the Patient able to receive 2FA code? (Y/N):
+      <input type="text" id="2FA_receivedCode" required>
+    </label>
+    <label>Disable 2FA? (Y/N):
+      <input type="text" id="2FA_disable" required>
+    </label>
+    <label>Did the Patient successfully log in after receiving 2FA code? (Y/N):
+      <input type="text" id="2FA_successfulLogin" required>
+    </label>
+    <label>If no - why?
+      <textarea id="2FA_whyNot" required></textarea>
+    </label>
+
+    <p>---------------------- MyChart App/Website Issues ---------------------</p>
+    <label>Is the background Red or Green? (Green = Integris, Red = HPI)
+      <input type="text" id="2FA_backgroundColor" required>
+    </label>
+    <label>What exactly is the issue with the App or Website?
+      <textarea id="2FA_appIssue" required></textarea>
+    </label>
+    <label>Please include any error messages etc.
+      <textarea id="2FA_errorMessages" required></textarea>
+    </label>
+
+    <p>---------------------- For All Issues: Troubleshooting Steps ---------------------</p>
+    <textarea id="2FA_troubleshooting" readonly>
+Clear browser cache (desktop/laptop)
+Remove WiFi (cell phone)
+Reboot Device (this may cause the call to drop so arrange to call them back in 2 or 3 minutes first!)
+    </textarea>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+<!-- I&Me INC Template Form -->
+<div id="iAndMeTemplateForm" class="form-container">
+  <form id="templateFormIAndMe" onsubmit="event.preventDefault(); generateOutputTemplateIAndMe(); this.reset();">
+    <p>---------------------- I&amp;Me INC Template (must verify with caller, do not copy from S‑Now) ---------------------</p>
+
+    <label>Patient's Name (first & last):
+      <input type="text" id="iandme_patientName" required>
+    </label>
+    <label>MRN:
+      <input type="text" id="iandme_mrn" required>
+    </label>
+    <label>DOB:
+      <input type="text" id="iandme_dob" required>
+    </label>
+    <label>I&amp;M ID:
+      <input type="text" id="iandme_imid" required>
+    </label>
+    <label>SSN Verified (Y/N):
+      <input type="text" id="iandme_ssnVerified" required>
+    </label>
+
+    <p>--------------What is the issue?----------------</p>
+    <textarea id="iandme_issueDetail" required></textarea>
+
+    <p>----------------Steps to Resolve----------------</p>
+    <textarea id="iandme_steps" required></textarea>
+
+    <p>------------------Additional Q--------------------</p>
+    <label>Who is your provider?
+      <input type="text" id="iandme_provider" required>
+    </label>
+    <label>When was your last visit?
+      <input type="text" id="iandme_lastVisit" required>
+    </label>
+    <label>How long have you been seeing this provider?
+      <input type="text" id="iandme_duration" required>
+    </label>
+    <label>Was this an ER visit, Clinic visit, or hospital stay?
+      <input type="text" id="iandme_visitType" required>
+    </label>
+
+    <label>Who is this affecting?
+      <input type="text" id="iandme_affecting" required>
+    </label>
+    <label>When did this start?
+      <input type="text" id="iandme_start" required>
+    </label>
+    <label>Did this work before?
+      <input type="text" id="iandme_workBefore" required>
+    </label>
+    <label>Has anything changed since it last worked?
+      <input type="text" id="iandme_changed" required>
+    </label>
+    <label>List any error messages:
+      <input type="text" id="iandme_errorMessages" required>
+    </label>
+
+    <label>Verification completed? (Y/N):
+      <input type="text" id="iandme_verification" required>
+    </label>
+    <label>Patient's Phone Number:
+      <input type="text" id="iandme_phone" required>
+    </label>
+    <label>Alternative Phone Number:
+      <input type="text" id="iandme_altPhone" required>
+    </label>
+    <label>Email:
+      <input type="text" id="iandme_email" required>
+    </label>
+    <label>Requested callback? (Y/N):
+      <input type="text" id="iandme_callback" required>
+    </label>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+<!-- call Transfer Form -->
+<div id="callTransferTemplateForm" class="form-container">
+<form id="callTransferTemplate" onsubmit="event.preventDefault(); generateCallTransferOutput();this.reset();">
+  <h3>Call Transfer Template</h3>
+  <label for="callbackNumber"><strong>Callback Number:</strong></label><br>
+  <input type="text" id="callbackNumber" name="callbackNumber" required><br><br>
+
+  <label for="callTransferredTo"><strong>Call Transferred to:</strong></label><br>
+  <input type="text" id="callTransferredTo" name="callTransferredTo" required><br><br>
+<div class="button-container">
+  <button type="submit">Generate Output</button>
+    </div>
+</form>
+</div>
+<!-- Phone line issues Form -->
+<div id="phoneLineIssuesForm" class="form-container">
+  <form id="templateFormPhoneLine" onsubmit="event.preventDefault(); generateOutputPhoneLine(); this.reset();">
+    <p>----------------------  Caregiver Info (must verify with caller, do not copy from S-Now)  ---------------------</p>
+    <label>Call back Phone Number (must be different from affected phone number):
+      <input type="text" id="pli_callbackNumber" required>
+    </label>
+    <label>Location/Dept/floor/Room:
+      <input type="text" id="pli_location" required>
+    </label>
+    <label>Phone Type (Avaya, IP phone etc...):
+      <input type="text" id="pli_phoneType" required>
+    </label>
+    <label>Affected Phone number:
+      <input type="text" id="pli_affectedPhone" required>
+    </label>
+
+    <p>-------------------------  Detailed Reason for Call  -------------------------</p>
+    <textarea id="pli_reasonDetail" required></textarea>
+
+    <p>---------------------- Required Questions ---------------------</p>
+    <label>Origination phone number (# called from):
+      <input type="text" id="pli_originNumber" required>
+    </label>
+    <label>Destination Phone number (# call was made to):
+      <input type="text" id="pli_destNumber" required>
+    </label>
+    <label>Date of call:
+      <input type="text" id="pli_dateOfCall" required>
+    </label>
+    <label>Time of call (include time zone):
+      <input type="text" id="pli_timeOfCall" required>
+    </label>
+    <label>Result (ex: dropped call, garbled audio, etc.):
+      <input type="text" id="pli_result" required>
+    </label>
+    <label>Trouble observed (Inbound or Outbound):
+      <input type="text" id="pli_direction" required>
+    </label>
+
+    <p>(KB0010216 for phone line issues)</p>
+
+    <p>------------------------   Detailed troubleshooting Steps taken ----------------------------------</p>
+    <textarea id="pli_troubleshoot" required></textarea>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+
+<div id="adPasswordResetTemplateForm" class="form-container">
+  <form id="templateForm8" onsubmit="event.preventDefault(); generateOutputTemplate8(); this.reset();">
+    <p>----------------------  Service Desk Instructions  ---------------------</p>
+    <p>Service Desk should not reset passwords for caregivers unless they are a REMOTE new hire. All others please walk them through the SSPR method.</p>
+
+    <p>----------------------  Call Information ---------------------</p>
+    <label>Best call back number:
+      <input type="text" id="ad_callbackNumber" required>
+    </label>
+    <label>Best call back day & time:
+      <input type="text" id="ad_callbackTime" required>
+    </label>
+    <label>Location/Dept/Floor/Suite:
+      <input type="text" id="ad_location" required>
+    </label>
+    <label>Is this a first time password for a new caregiver or rehire Y/N:
+      <input type="text" id="ad_newHire" required>
+    </label>
+
+    <p>---------------------- Verification Method ---------------------</p>
+    <label>If PW was reset, what verification method was used:
+      <select id="ad_verificationMethod" required>
+        <option value="sspr">1. Walked thru SSPR</option>
+        <option value="remoteNewHire">2. Emailed photo of face and badge or drivers license (REMOTE NEW HIRES ONLY)</option>
+        <option value="notReset">3. N/A, not reset</option>
+      </select>
+    </label>
+
+    <label>Was the caller able to successfully change their password and tested the login afterwards? Y/N:
+      <input type="text" id="ad_successfulLogin" required>
+    </label>
+
+    <p>---------------------- If Password was Not Reset ---------------------</p>
+    <label>If Password was not reset, enter complete notes including verification methods attempted and reason PW could not be reset:
+      <textarea id="ad_notes" required></textarea>
+    </label>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+<div id="citrixTemplateForm" class="form-container">
+  <form id="templateForm9" onsubmit="event.preventDefault(); generateOutputTemplate9(); this.reset();">
+    <p>----------------------  Service Desk Instructions  ---------------------</p>
+    <p>ALL QUESTIONS IN THE TOP SECTION MUST BE ANSWERED. DO NOT SKIP QUESTIONS!</p>
+
+    <p>----------------------  Call Information ---------------------</p>
+    <label>Caregiver Name:
+      <input type="text" id="citrix_cgName" required>
+    </label>
+    <label>Location:
+      <input type="text" id="citrix_location" required>
+    </label>
+    <label>Best call back phone number:
+      <input type="text" id="citrix_callbackNumber" required>
+    </label>
+
+    <label>Name of caller if calling on behalf of:
+      <input type="text" id="citrix_callerName" required>
+    </label>
+    <label>Caller's phone number if calling on behalf of:
+      <input type="text" id="citrix_callerPhone" required>
+    </label>
+
+    <label>Are you using XenApp or XD Default?
+      <input type="text" id="citrix_xenAppOrXD" required>
+    </label>
+    <label>Workstation Name:
+      <input type="text" id="citrix_workstationName" required>
+    </label>
+
+    <label>What application and specific work were you working on when the issue occurred (not just application but exactly what were they doing in that application too):
+      <textarea id="citrix_applicationIssue" required></textarea>
+    </label>
+
+    <label>When did the issue start?
+      <input type="text" id="citrix_issueStart" required>
+    </label>
+    <label>What is the frequency the issue occurs (on-going/always, intermittent etc..):
+      <input type="text" id="citrix_issueFrequency" required>
+    </label>
+
+    <label>Other than the application you are experiencing issues with, what else is currently running (include all applications in and out of Citrix)?
+      <textarea id="citrix_otherApplications" required></textarea>
+    </label>
+
+    <label>Were you able to complete your task, were you hung up, just experiencing slowness, or did the task abnormally end? (Did the application crash or kick you out?):
+      <textarea id="citrix_taskCompletion" required></textarea>
+    </label>
+
+    <p>----------------------  Optional Information ---------------------</p>
+    <p>This information can be filled out manually or your screenshot should have all of this information visible (These fields are NOT required!)</p>
+
+    <label>Session Name:
+      <input type="text" id="citrix_sessionName">
+    </label>
+    <label>Session IP:
+      <input type="text" id="citrix_sessionIP">
+    </label>
+    <label>Time the session started:
+      <input type="text" id="citrix_sessionStartTime">
+    </label>
+    <label>Error messages:
+      <input type="text" id="citrix_errorMessages">
+    </label>
+    <label>Endpoint name (WW, WL, TC, TW, personal or vendor device):
+      <input type="text" id="citrix_endpointName">
+    </label>
+    <label>End point IP:
+      <input type="text" id="citrix_endpointIP">
+    </label>
+
+    <p>----------------------  Detailed Troubleshooting ---------------------</p>
+    <label>Detailed troubleshooting steps taken and resolution:
+      <textarea id="citrix_troubleshooting" required></textarea>
+    </label>
+
+    <p>SCREENSHOT MUST BE INCLUDED!</p>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+
+<div id="myTimeTemplateForm" class="form-container">
+  <form id="templateForm10" onsubmit="event.preventDefault(); generateOutputTemplate10(); this.reset();">
+    <p>----------------------  MyTime Template  ---------------------</p>
+
+    <label>Caregiver Name:
+      <input type="text" id="mytime_cgName" required>
+    </label>
+    <label>Caregiver ID:
+      <input type="text" id="mytime_cgID" required>
+    </label>
+    <label>Employee ID (800#):
+      <input type="text" id="mytime_empID" required>
+    </label>
+    <label>Email Address:
+      <input type="email" id="mytime_email" required>
+    </label>
+    <label>Phone Number:
+      <input type="text" id="mytime_phoneNumber" required>
+    </label>
+    <label>Best contact number:
+      <input type="text" id="mytime_contactNumber" required>
+    </label>
+    <label>Best time to contact:
+      <input type="text" id="mytime_contactTime" required>
+    </label>
+
+    <label>Description of issue:
+      <textarea id="mytime_description" required></textarea>
+    </label>
+
+    <label>Is this a Manager issue? (Y/N):
+      <select id="mytime_managerIssue" required>
+        <option value="Y">Yes</option>
+        <option value="N">No</option>
+      </select>
+    </label>
+
+    <label>If can't punch, what method are you using (mobile, timeclock, PC)?
+      <input type="text" id="mytime_punchMethod" required>
+    </label>
+
+    <label>If mobile issue, what is the physical access?
+      <select id="mytime_mobileAccess" required>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+        <option value="N/A">N/A</option>
+      </select>
+    </label>
+
+    <p>----------------------  If Timeclock issue, please gather the following  ---------------------</p>
+    <p>- Badge number (see KB0011506): <input type="text" id="mytime_badgeNumber" required></p>
+    <p>- Timeclock number (6 digit numeric number located on the back of the time clock see KB0011506): <input type="text" id="mytime_timeclockNumber" required></p>
+    <p>- EXACT Location of Timeclock: <input type="text" id="mytime_timeclockLocation" required></p>
+
+    <label>SD troubleshooting steps taken:
+      <textarea id="mytime_troubleshooting" required></textarea>
+    </label>
+
+    <div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+  </form>
+</div>
+<div id="statusCheckTemplateForm" class="form-container">
+  <form id="templateForm11" onsubmit="event.preventDefault(); generateOutputTemplate11(); this.reset();">
+    <p>----------------------  Status Check Template  ---------------------</p>
+
+    <label>Name of caller (Verify who is calling):
+      <input type="text" id="statuscheck_callerName" required>
+    </label>
+    <label>Location:
+      <input type="text" id="statuscheck_location" required>
+    </label>
+    <label>Best call back #:
+      <input type="text" id="statuscheck_callbackNumber" required>
+    </label>
+
+    <p>****   SD agent must confirm/verify location and callback number are correct/accurate with caller ****</p>
+
+    <label>Reason for Callback (Status Check, Customer Escalation, etc.):
+      <input type="text" id="statuscheck_reason" required>
+    </label>
+
+    <label>Has anything changed since the ticket was originally placed?:
+      <input type="text" id="statuscheck_changes" required>
+    </label>
+
+    <label>Additional Information (Is there any information NOT in the ticket, Device ID, Phone Number, Full Location, screenshots, error messages, etc.):
+      <textarea id="statuscheck_additionalInfo" required></textarea>
+    </label>
+
+
+<div class="button-container">
+      <button type="submit">Generate Output</button>
+    </div>
+    </form>
+  </div>
+  
+  <div id="wrongPTAdmittedTemplateForm" class="form-container">
+  <form id="templateForm12" onsubmit="event.preventDefault(); generateOutputTemplate12(); this.reset();">
+    <p>----------------------  Wrong PT Admitted Template  ---------------------</p>
+
+    <label>Caregiver Name:
+      <input type="text" id="wrongpt_caregiverName" required>
+    </label>
+    <label>User ID:
+      <input type="text" id="wrongpt_userId" required>
+    </label>
+    <label>Best call back number:
+      <input type="text" id="wrongpt_callbackNumber" required>
+    </label>
+    <label>Best call back day & time:
+      <input type="text" id="wrongpt_callbackTime" required>
+    </label>
+    <label>Job Description/Role:
+      <input type="text" id="wrongpt_role" required>
+    </label>
+    <label>Location/Dept/floor/Room:
+      <input type="text" id="wrongpt_location" required>
+    </label>
+
+    <label>Name of caller if calling on behalf of:
+      <input type="text" id="wrongpt_callerName" required>
+    </label>
+    <label>Caller's phone number if calling on behalf of:
+      <input type="text" id="wrongpt_callerPhone" required>
+    </label>
+
+    <label>Incorrect patient name:
+      <input type="text" id="wrongpt_incorrectName" required>
+    </label>
+    <label>Incorrect patient MRN:
+      <input type="text" id="wrongpt_incorrectMRN" required>
+    </label>
+
+    <label>Correct patient name:
+      <input type="text" id="wrongpt_correctName" required>
+    </label>
+    <label>Correct patient MRN:
+      <input type="text" id="wrongpt_correctMRN" required>
+    </label>
+
+    <label>Is the patient still in house and being treated? (Y/N):
+      <select id="wrongpt_patientStatus" required>
+        <option value="Y">Yes</option>
+        <option value="N">No</option>
+      </select>
+    </label>
+
+    <p>**** If YES - adjust priority to P3 and assign to Epic Patient Identity. If it's outside of business hours, call the on-call. ****</p>
+    <p>**** If NO - assign to Epic Patient Identity as a P3 ticket. ****</p>
+
+    <label>Additional Details as needed:
+      <textarea id="wrongpt_additionalDetails" required></textarea>
+    </label>
+
+    <p>Service desk should attach and follow KB0006221!</p>
+
+    <div class="button-container">
+      <button type="submit" onclick="showCopyButton();">Generate Output</button>
+    </div>
+  </form>
+</div>
+
+
+  <!-- Output display and copy button -->
+  <div id="output"></div>
+
+  <div class="button-container" id="copyContainer" style="display: none;">
+    <button type="button" id=
+  "outputButton" onclick="copyOutput()">Copy to Clipboard</button>
+  </div>
+</div>
+  <script>
+    function clearAllForms() {
+  const forms = document.querySelectorAll("form");
+  forms.forEach(form => form.reset());
+}
+    // Toggle between templates based on dropdown selection
+   function toggleTemplate() {
+     document.getElementById("output").innerText="";
+     document.getElementById("copyContainer").style.display="none";
+    const selected = document.getElementById('templateSelect').value;
+    clearAllForms(); // Add this line
+
+    // List of all form elements
+    const forms = {
+        "2FA": document.getElementById('twoFAForm'),
+        "myChart": document.getElementById('myChartForm'),
+        "thirdTemplate": document.getElementById('thirdTemplateForm'),
+        "myChartPWReset": document.getElementById('myChartPWResetForm'),
+        "myTimeREQ": document.getElementById("myTimeTemplateForm"),
+        "taskTemplate": document.getElementById('taskTemplateForm'),
+        "techTemplate": document.getElementById('techTemplateForm'),
+        "clinicalTemplate": document.getElementById('clinicalTemplateForm'),
+        "2FAincTemplate": document.getElementById('twoFATemplateForm'),
+        "IAndMeINC": document.getElementById('iAndMeTemplateForm'),
+        "callTransfer": document.getElementById('callTransferTemplateForm'),
+        "phoneLines": document.getElementById('phoneLineIssuesForm'),
+        "ADpwReset": document.getElementById('adPasswordResetTemplateForm'),
+        "CitrixTemplate": document.getElementById('citrixTemplateForm'),
+        "myTimeINC": document.getElementById('myTimeTemplateForm'),
+        "statusCheck": document.getElementById('statusCheckTemplateForm'),
+        "wrongPT": document.getElementById('wrongPTAdmittedTemplateForm'),
+    };
+
+    // Hide all templates initially
+    for (const form in forms) {
+        forms[form].style.display = "none";
+    }
+
+    // Show the selected template
+    if (forms[selected]) {
+        forms[selected].style.display = "block";
+    }
+}
+
+      // Clear the output and hide copy button when switching templates
+ 
+
+    // Generate output for the 2FA Template
+    function generateOutputTemplate1() {
+      const outputText = `
+Patient's Name (first &last): ${document.getElementById('sn_name').value}
+Phone Number: ${document.getElementById('sn_phone').value}
+
+Was Verification completed (DOB, last of SSN & mailing address? (Y/N)
+(must request email if patient refuses to provide SSN info)
+${document.getElementById('sn_verification').value}
+
+Verified Email? (Y/N): ${document.getElementById('sn_emailVerified').value}
+
+Check Junk/Spam folder? (Y/N): ${document.getElementById('sn_junkCheck').value}
+
+Was the Patient able to receive 2FA code? (Y/N): ${document.getElementById('sn_received2fa').value}
+
+Disable 2FA? (Y/N): ${document.getElementById('sn_disable2fa').value}
+
+Did the Patient successfully was able to log in after receiving 2FA code? (Y/N): ${document.getElementById('sn_successLogin').value}
+
+If no - why?
+${document.getElementById('sn_reason').value}
+      `.trim();
+
+      document.getElementById('output').innerText = outputText;
+      document.getElementById('copyContainer').style.display = 'block';
+      
+    }
+
+    // Generate output for the MyChart Activation Template
+    function generateOutputTemplate2() {
+      const outputText = `
+Patient's Name (first &last): ${document.getElementById('mc_name').value}
+Phone Number: ${document.getElementById('mc_phone').value}
+
+--------------What is the issue?----------------
+New activation of patient account
+
+----------------Steps to Resolve----------------
+
+Was verification completed (DOB, last 4 of SSN & mailing address? (Y/N):
+(Must request email if patient refuses to provide SSN info)
+${document.getElementById('mc_verification').value}
+
+Was Activation code generated and given to the patient? (Y/N):
+${document.getElementById('mc_activation').value}
+
+Was the patient able to successfully log into their MyChart account? (Y/N):
+${document.getElementById('mc_login').value}
+
+KB used: ${document.getElementById('mc_kb').value}
+
+Please note if the patient is not receiving the MFA code, you will need to create an INC ticket instead.
+      `.trim();
+
+      document.getElementById('output').innerText = outputText;
+      document.getElementById('copyContainer').style.display = 'block';
+    }
+
+    // Generate output for the MyChart General Template
+    function generateOutputTemplate3() {
+      const outputText = `
+Patient's Name (first &last): ${document.getElementById('t3_name').value}
+MRN: ${document.getElementById('t3_mrn').value}
+DOB: ${document.getElementById('t3_dob').value}
+I&M ID: ${document.getElementById('t3_imid').value}
+Verified SSN Y/N: ${document.getElementById('t3_verified_ssn').value}
+
+--------------What is the issue?----------------
+${document.getElementById('t3_issue').value}
+
+----------------Steps to Resolve----------------
+${document.getElementById('t3_steps').value}
+
+------------------Additional Q--------------------
+Who is your provider? ${document.getElementById('t3_provider').value}
+When was your last visit? ${document.getElementById('t3_last_visit').value}
+How long have you been seeing this provider? ${document.getElementById('t3_duration').value}
+Was this an ER visit, Clinic visit, or hospital stay? ${document.getElementById('t3_visit_type').value}
+
+Who is this affecting? ${document.getElementById('t3_affecting').value}
+When did this start? ${document.getElementById('t3_start').value}
+Did this work before? ${document.getElementById('t3_worked_before').value}
+Has anything changed since it last worked? ${document.getElementById('t3_changed').value}
+List any error messages: ${document.getElementById('t3_error_msg').value}
+
+Verification completed (DOB, last 4 of SSN & mailing address? (Y/N):
+(Must request email if patient refuses to provide SSN info)
+${document.getElementById('t3_verification').value}
+
+Patient's Phone Number: ${document.getElementById('t3_phone').value}
+Alternative Phone Number: ${document.getElementById('t3_alt_phone').value}
+Email: ${document.getElementById('t3_email').value}
+Requested callback? (Y/N): ${document.getElementById('t3_callback').value}
+      `.trim();
+
+      document.getElementById('output').innerText = outputText;
+      document.getElementById('copyContainer').style.display = 'block';
+    }
+
+    // Generate output for the MyChart PW Reset Template
+    function generateOutputTemplate4() {
+      const outputText = `
+Patient's Name (first &last): ${document.getElementById('pw_name').value}
+Phone number: ${document.getElementById('pw_phone').value}
+
+Was Verification completed (DOB, last 4 of SSN & mailing address? (Y/N):
+(Must request email if patient refuses to provide SSN info)
+${document.getElementById('pw_verification').value}
+
+Did you provide the password constraint requirements (Y/N)? ${document.getElementById('pw_constraints').value}
+
+Was the Patient able to successfully change their password and log in? (Y/N): ${document.getElementById('pw_changed').value}
+
+If no - why?
+${document.getElementById('pw_reason').value}
+      `.trim();
+
+      document.getElementById('output').innerText = outputText;
+      document.getElementById('copyContainer').style.display = 'block';
+    }
+
+    // Generate output for the PW Reset Template
+    function generateOutputTemplate5() {
+      const outputText = `
+------------Caller Info (Must verify with caller, not copied from S-Now)----------------------
+Phone Number: ${document.getElementById('pr_phone').value}
+\n
+Location/Dept/Floor/Suit: ${document.getElementById('pr_location').value}
+\n
+KB Used: ${document.getElementById('pr_kb').value}
+\n
+Was the caller Verified with SSN: ${document.getElementById('pr_verified').value}
+\n
+What application was the pwd reset in? ${document.getElementById('pr_app').value}
+\n
+Was the caller given the requirements to change pwd? ${document.getElementById('pr_requirements').value}
+\n
+Was the caller able to successfully change the pwd? ${document.getElementById('pr_success').value}
+      `.trim();
+
+      document.getElementById('output').innerText = outputText;
+      document.getElementById('copyContainer').style.display = 'block';
+    }
+    // Generate output for the task Template
+    function generateOutputTemplate6() {
+      const outputText = `
+------------Caller Info (Must verify with caller, not copied from S-Now)----------------------
+Phone Number: ${document.getElementById('taskPhone').value}
+\n
+Location/Dept/Floor/Suit: ${document.getElementById('taskLocation').value}
+ 
+-------------------------------What is being Requested? ------------------------------
+\n
+What application/File/access is being requested?: ${document.getElementById('taskRequest').value}
+\n
+Why do they need this request? ${document.getElementById('taskWhy').value}
+\n
+When do they need this request done? ${document.getElementById('taskWhen').value}
+\n
+Who is the request for? (The caller? Or someone else?) ${document.getElementById('taskWho').value}
+\n
+Does this request require supervisor approval, if so, who is the supervisor? ${document.getElementById('taskApproval').value}
+\n
+Is there someone with the same access that can be mirrored? If so, who? ${document.getElementById('taskMirror').value}
+\n
+
+What KB was used: ${document.getElementById('taskKB').value}
+`.trim();
+
+      document.getElementById('output').innerText = outputText;
+      document.getElementById('copyContainer').style.display = 'block';
+    }
+    
+    function generateOutputTemplate7() {
+  const outputText = `
+----------------------  Caregiver Info (must verify with caller, do not copy from S-Now)  ---------------------
+Caregiver Name: ${document.getElementById('cg_name').value}
+User ID &/or 8000# (8000 # must be included for Kronos): ${document.getElementById('cg_userId').value}
+Best call back number: ${document.getElementById('cg_callbackNumber').value}
+Best call back day & time: ${document.getElementById('cg_callbackTime').value}
+Location/Dept/floor/Room: ${document.getElementById('cg_location').value}
+PCID/Device Name: ${document.getElementById('cg_device').value}
+Fax number if applicable: ${document.getElementById('cg_fax').value}
+
+Name of caller if calling on behalf of: ${document.getElementById('cg_callerName').value}
+Caller's phone number if calling on behalf of: ${document.getElementById('cg_callerPhone').value}
+
+-------------------------  Detailed Reason for Call  -------------------------
+${document.getElementById('cg_reasonDetail').value}
+
+---------------------- Required Questions ---------------------
+Who is this affecting and how many caregivers are currently affected? ${document.getElementById('cg_affected').value}
+\n
+Has the caregiver attempted anything to correct the issue, such as rebooting? ${document.getElementById('cg_triedSolutions').value}
+\n
+When did this start/ how long has it been occurring? ${document.getElementById('cg_startTime').value}
+\n
+What was your workflow / What were you working on when the issue occurred (application name)? ${document.getElementById('cg_workflow').value}
+\n
+Has anything changed since it last worked? ${document.getElementById('cg_changes').value}
+\n
+Have screenshots been gathered and attached? ${document.getElementById('cg_screenshots').value}
+\n
+Are there any error messages? IF so, what did it say? ${document.getElementById('cg_errors').value}
+\n
+Was KB attached and TS steps\\templates followed and used? ${document.getElementById('cg_kbSteps').value}
+
+------------------------   Detailed troubleshooting Steps taken ----------------------------------
+${document.getElementById('cg_troubleshoot').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+function generateOutputTemplateClinical() {
+  const outputText = `
+---------------------- Caregiver Info (must verify with caller, do not copy from S-Now) ---------------------
+Caregiver Name: ${document.getElementById('clinical_caregiverName').value}
+\nUser ID: ${document.getElementById('clinical_userId').value}
+\nBest call back number: ${document.getElementById('clinical_callbackNumber').value}
+\nBest call back day & time: ${document.getElementById('clinical_callbackTime').value}
+\nJob Description/Role: ${document.getElementById('clinical_jobDescription').value}
+\nLocation/Dept/floor/Room: ${document.getElementById('clinical_location').value}
+\nPCID/Device Name: ${document.getElementById('clinical_device').value}
+\nEpic Login Dept: ${document.getElementById('clinical_epicDept').value}
+\nName of caller if calling on behalf of: ${document.getElementById('clinical_callerName').value}
+\nCaller's phone number if calling on behalf of: ${document.getElementById('clinical_callerPhone').value}
+
+------------------------- Detailed Reason for Call -------------------------
+${document.getElementById('clinical_reasonDetail').value}
+
+---------------------- Required Questions ---------------------
+Who is this affecting and how many caregivers are currently affected? ${document.getElementById('clinical_affected').value}
+\nHas the caregiver attempted anything to correct the issue, such as rebooting? ${document.getElementById('clinical_triedSolutions').value}
+\nWhen did this start/ how long has it been occurring? ${document.getElementById('clinical_startTime').value}
+\nWhat was your workflow / What were you working on when the issue occurred (application name)? ${document.getElementById('clinical_workflow').value}
+\nHave screenshots been gathered and attached? ${document.getElementById('clinical_screenshots').value}
+\nAre there any error messages? IF so, what did it say? ${document.getElementById('clinical_errors').value}
+\nIs there a specific person to mirror? ${document.getElementById('clinical_mirror').value}
+\nWas KB attached and TS steps/templates followed and used? ${document.getElementById('clinical_kbSteps').value}
+
+------------------------ Detailed troubleshooting Steps taken ----------------------------------
+${document.getElementById('clinical_troubleshoot').value}
+
+------------------------ Clinical Specific Info ----------------------------------
+Patient Name: ${document.getElementById('clinical_patientName').value}
+\nDOB: ${document.getElementById('clinical_dob').value}
+\nMRN: ${document.getElementById('clinical_mrn').value}
+\nCSN: ${document.getElementById('clinical_csn').value}
+\nDOS: ${document.getElementById('clinical_dos').value}
+\nOrder Number (if applicable): ${document.getElementById('clinical_orderNumber').value}
+\nAccession Number (if applicable): ${document.getElementById('clinical_accessionNumber').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+function generateOutputTemplate2FA() {
+  // Gather all form input data
+  const outputText = `
+---------------------- Patient Info ---------------------
+Patient's Name (first & last): ${document.getElementById('2FA_patientName').value}
+\nPhone Number: ${document.getElementById('2FA_phoneNumber').value}
+\nMRN: ${document.getElementById('2FA_mrn').value}
+\nWas Verification completed (DOB, SSN, email & mailing address? (Y/N): ${document.getElementById('2FA_verification').value}
+
+---------------------- Device/Connection Info ---------------------
+Is Patient on a cell phone/tablet or Desktop/Laptop?: ${document.getElementById('2FA_deviceType').value}
+\nWho is their ISP or Wireless Provider?: ${document.getElementById('2FA_isp').value}
+\nWhat kind of phone/tablet are they using?: ${document.getElementById('2FA_deviceModel').value}
+\nWhat browser are they using?: ${document.getElementById('2FA_browser').value}
+
+---------------------- 2FA Issues ---------------------
+Check Junk/Spam folder? (Y/N): ${document.getElementById('2FA_spamCheck').value}
+\nWas the Patient able to receive 2FA code? (Y/N): ${document.getElementById('2FA_receivedCode').value}
+\nDisable 2FA? (Y/N): ${document.getElementById('2FA_disable').value}
+\nDid the Patient successfully log in after receiving 2FA code? (Y/N): ${document.getElementById('2FA_successfulLogin').value}
+\nIf no - why?: ${document.getElementById('2FA_whyNot').value}
+
+---------------------- MyChart App/Website Issues ---------------------
+Is the background Red or Green? (Green = Integris, Red = HPI): ${document.getElementById('2FA_backgroundColor').value}
+\nWhat exactly is the issue with the App or Website?: ${document.getElementById('2FA_appIssue').value}
+\nPlease include any error messages etc.: ${document.getElementById('2FA_errorMessages').value}
+
+---------------------- For All Issues: Troubleshooting Steps ---------------------
+Clear browser cache (desktop/laptop)
+Remove WiFi (cell phone)
+Reboot Device (this may cause the call to drop so arrange to call them back in 2 or 3 minutes first!)
+`.trim();
+
+  // Display output and show copy button
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('output').style.display = 'block'; // Show output
+  document.getElementById('copyContainer').style.display = 'block'; // Show copy button
+}
+// Generate output for I&Me INC Template
+function generateOutputTemplateIAndMe() {
+  const outputText = `
+Patient's Name (first & last): ${document.getElementById('iandme_patientName').value}
+MRN: ${document.getElementById('iandme_mrn').value}
+DOB: ${document.getElementById('iandme_dob').value}
+I&M ID: ${document.getElementById('iandme_imid').value}
+SSN Verified (Y/N): ${document.getElementById('iandme_ssnVerified').value}
+
+--------------What is the issue?----------------
+${document.getElementById('iandme_issueDetail').value}
+
+----------------Steps to Resolve----------------
+${document.getElementById('iandme_steps').value}
+
+------------------Additional Q--------------------
+Who is your provider? ${document.getElementById('iandme_provider').value}
+When was your last visit? ${document.getElementById('iandme_lastVisit').value}
+How long have you been seeing this provider? ${document.getElementById('iandme_duration').value}
+Was this an ER visit, Clinic visit, or hospital stay? ${document.getElementById('iandme_visitType').value}
+
+Who is this affecting? ${document.getElementById('iandme_affecting').value}
+When did this start? ${document.getElementById('iandme_start').value}
+Did this work before? ${document.getElementById('iandme_workBefore').value}
+Has anything changed since it last worked? ${document.getElementById('iandme_changed').value}
+List any error messages: ${document.getElementById('iandme_errorMessages').value}
+
+Verification completed? (Y/N): ${document.getElementById('iandme_verification').value}
+Patient's Phone Number: ${document.getElementById('iandme_phone').value}
+Alternative Phone Number: ${document.getElementById('iandme_altPhone').value}
+Email: ${document.getElementById('iandme_email').value}
+Requested callback? (Y/N): ${document.getElementById('iandme_callback').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+
+function getPatientSafetyTemplateOutput() {
+  const caller = document.getElementById("psiCallerInfo").value.trim();
+  const area = document.getElementById("psiArea").value;
+  const issue = document.getElementById("psiIssue").value;
+  const q1 = document.getElementById("psiQ1").value.trim();
+  const q2 = document.getElementById("psiQ2").value.trim();
+  const q3 = document.getElementById("psiQ3").value.trim();
+  const q4 = document.getElementById("psiQ4").value.trim();
+  const notes = document.getElementById("psiNotes").value.trim();
+
+  return `PATIENT SAFETY TEMPLATE
+
+Caller Info:
+${caller}
+
+Area: ${area}
+Issue: ${issue}
+
+1. Verified triggers present: ${q1}
+2. Imminent safety risk: ${q2}
+3. Workaround available: ${q3}
+4. Workaround causes risk: ${q4}
+
+Notes:
+${notes}
+
+*Make sure 'What Type of Incident' is set to: PATIENT SAFETY*
+`;
+}
+
+function generateCallTransferOutput() {
+  const callbackNumber = document.getElementById("callbackNumber").value.trim();
+  const callTransferredTo = document.getElementById("callTransferredTo").value.trim();
+
+  const output = 
+`Callback Number: ${callbackNumber}
+Call Transferred to: ${callTransferredTo}`;
+
+   document.getElementById('output').innerText = output;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+
+
+function generateOutputPhoneLine() {
+  const outputText = `
+----------------------  Caregiver Info (must verify with caller, do not copy from S-Now)  ---------------------
+Call back Phone Number (must be different from affected phone number): ${document.getElementById('pli_callbackNumber').value}
+
+Location/Dept/floor/Room: ${document.getElementById('pli_location').value}
+
+Phone Type (Avaya, IP phone etc...): ${document.getElementById('pli_phoneType').value}
+
+Affected Phone number: ${document.getElementById('pli_affectedPhone').value}
+
+-------------------------  Detailed Reason for Call  -------------------------
+${document.getElementById('pli_reasonDetail').value}
+
+---------------------- Required Questions ---------------------
+Origination phone number (# called from): ${document.getElementById('pli_originNumber').value}
+
+Destination Phone number (# call was made to): ${document.getElementById('pli_destNumber').value}
+
+Date of call: ${document.getElementById('pli_dateOfCall').value}
+
+Time of call (include time zone): ${document.getElementById('pli_timeOfCall').value}
+
+Result (ex: dropped call, garbled audio, etc.): ${document.getElementById('pli_result').value}
+
+Trouble observed (Inbound or Outbound): ${document.getElementById('pli_direction').value}
+
+(KB0010216 for phone line issues)
+
+------------------------   Detailed troubleshooting Steps taken ----------------------------------
+${document.getElementById('pli_troubleshoot').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+
+function generateOutputTemplate8() {
+  const outputText = `
+----------------------  Service Desk Instructions  ---------------------
+Service Desk should not reset passwords for caregivers unless they are a REMOTE new hire. All others please walk them through the SSPR method.
+
+----------------------  Call Information ---------------------
+Best call back number: ${document.getElementById('ad_callbackNumber').value}
+\n
+Best call back day & time: ${document.getElementById('ad_callbackTime').value}
+\n
+Location/Dept/Floor/Suite: ${document.getElementById('ad_location').value}
+\n
+Is this a first time password for a new caregiver or rehire Y/N: ${document.getElementById('ad_newHire').value}
+
+---------------------- Verification Method ---------------------
+If PW was reset, what verification method was used: ${document.getElementById('ad_verificationMethod').value}
+
+Was the caller able to successfully change their password and tested the login afterwards? Y/N: ${document.getElementById('ad_successfulLogin').value}
+
+---------------------- If Password was Not Reset ---------------------
+If Password was not reset, enter complete notes including verification methods attempted and reason PW could not be reset: 
+${document.getElementById('ad_notes').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+
+function generateOutputTemplate9() {
+  const outputText = `
+----------------------  Service Desk Instructions  ---------------------
+ALL QUESTIONS IN THE TOP SECTION MUST BE ANSWERED. DO NOT SKIP QUESTIONS!
+
+----------------------  Call Information ---------------------
+Caregiver Name: ${document.getElementById('citrix_cgName').value}
+\n
+Location: ${document.getElementById('citrix_location').value}
+\n
+Best call back phone number: ${document.getElementById('citrix_callbackNumber').value}
+\n
+Name of caller if calling on behalf of: ${document.getElementById('citrix_callerName').value}
+\n
+Caller's phone number if calling on behalf of: ${document.getElementById('citrix_callerPhone').value}
+\n
+Are you using XenApp or XD Default? ${document.getElementById('citrix_xenAppOrXD').value}
+\n
+Workstation Name: ${document.getElementById('citrix_workstationName').value}
+\n
+What application and specific work were you working on when the issue occurred (not just application but exactly what were they doing in that application too): 
+${document.getElementById('citrix_applicationIssue').value}
+\n
+When did the issue start? ${document.getElementById('citrix_issueStart').value}
+\n
+What is the frequency the issue occurs (on-going/always, intermittent etc..): ${document.getElementById('citrix_issueFrequency').value}
+\n
+Other than the application you are experiencing issues with, what else is currently running (include all applications in and out of Citrix)? 
+${document.getElementById('citrix_otherApplications').value}
+\n
+Were you able to complete your task, were you hung up, just experiencing slowness, or did the task abnormally end? (Did the application crash or kick you out?): 
+${document.getElementById('citrix_taskCompletion').value}
+
+----------------------  Optional Information ---------------------
+Session Name: ${document.getElementById('citrix_sessionName').value}
+\n
+Session IP: ${document.getElementById('citrix_sessionIP').value}
+\n
+Time the session started: ${document.getElementById('citrix_sessionStartTime').value}
+\n
+Error messages: ${document.getElementById('citrix_errorMessages').value}
+\n
+Endpoint name (WW, WL, TC, TW, personal or vendor device): ${document.getElementById('citrix_endpointName').value}
+\n
+End point IP: ${document.getElementById('citrix_endpointIP').value}
+
+----------------------  Detailed Troubleshooting ---------------------
+Detailed troubleshooting steps taken and resolution: 
+${document.getElementById('citrix_troubleshooting').value}
+
+SCREENSHOT MUST BE INCLUDED!
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+
+function generateOutputTemplate10() {
+  const outputText = `
+----------------------  MyTime Template  ---------------------
+Caregiver Name: ${document.getElementById('mytime_cgName').value}
+\n
+Caregiver ID: ${document.getElementById('mytime_cgID').value}
+\n
+Employee ID (800#): ${document.getElementById('mytime_empID').value}
+\n
+Email Address: ${document.getElementById('mytime_email').value}
+\n
+Phone Number: ${document.getElementById('mytime_phoneNumber').value}
+\n
+Best contact number: ${document.getElementById('mytime_contactNumber').value}
+\n
+Best time to contact: ${document.getElementById('mytime_contactTime').value}
+
+Description of issue:
+${document.getElementById('mytime_description').value}
+
+Is this a Manager issue? (Y/N): ${document.getElementById('mytime_managerIssue').value}
+
+If can't punch, what method are you using (mobile, timeclock, PC)? ${document.getElementById('mytime_punchMethod').value}
+
+If mobile issue, what is the physical access? ${document.getElementById('mytime_mobileAccess').value}
+
+----------------------  If Timeclock issue, please gather the following  ---------------------
+- Badge number (see KB0011506): ${document.getElementById('mytime_badgeNumber').value}
+\n
+- Timeclock number (6 digit numeric number located on the back of the time clock see KB0011506): ${document.getElementById('mytime_timeclockNumber').value}
+\n
+- EXACT Location of Timeclock: ${document.getElementById('mytime_timeclockLocation').value}
+
+SD troubleshooting steps taken:
+${document.getElementById('mytime_troubleshooting').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+function generateOutputTemplate11() {
+  const outputText = `
+----------------------  Status Check Template  ---------------------
+Name of caller (Verify who is calling): ${document.getElementById('statuscheck_callerName').value}
+\n
+Location: ${document.getElementById('statuscheck_location').value}
+\n
+Best call back #: ${document.getElementById('statuscheck_callbackNumber').value}
+
+****   SD agent must confirm/verify location and callback number are correct/accurate with caller ****
+
+Reason for Callback (Status Check, Customer Escalation, etc.): ${document.getElementById('statuscheck_reason').value}
+\n
+Has anything changed since the ticket was originally placed?: ${document.getElementById('statuscheck_changes').value}
+\n
+Additional Information (Is there any information NOT in the ticket, Device ID, Phone Number, Full Location, screenshots, error messages, etc.):
+${document.getElementById('statuscheck_additionalInfo').value}
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+function generateOutputTemplate12() {
+  const outputText = `
+----------------------  Wrong PT Admitted Template  ---------------------
+Caregiver Name: ${document.getElementById('wrongpt_caregiverName').value}
+\n
+User ID: ${document.getElementById('wrongpt_userId').value}
+\n
+Best call back number: ${document.getElementById('wrongpt_callbackNumber').value}
+\n
+Best call back day & time: ${document.getElementById('wrongpt_callbackTime').value}
+\n
+Job Description/Role: ${document.getElementById('wrongpt_role').value}
+\n
+Location/Dept/floor/Room: ${document.getElementById('wrongpt_location').value}
+
+Name of caller if calling on behalf of: ${document.getElementById('wrongpt_callerName').value}
+\n
+Caller's phone number if calling on behalf of: ${document.getElementById('wrongpt_callerPhone').value}
+
+Incorrect patient name: ${document.getElementById('wrongpt_incorrectName').value}
+\n
+Incorrect patient MRN: ${document.getElementById('wrongpt_incorrectMRN').value}
+\n
+Correct patient name: ${document.getElementById('wrongpt_correctName').value}
+\n
+Correct patient MRN: ${document.getElementById('wrongpt_correctMRN').value}
+
+Is the patient still in house and being treated? (Y/N): ${document.getElementById('wrongpt_patientStatus').value}
+\n
+
+**** If YES - adjust priority to P3 and assign to Epic Patient Identity. If it's outside of business hours, call the on-call. ****
+\n
+**** If NO - assign to Epic Patient Identity as a P3 ticket. ****
+
+Additional Details as needed: ${document.getElementById('wrongpt_additionalDetails').value}
+
+Service desk should attach and follow KB0006221!
+`.trim();
+
+  document.getElementById('output').innerText = outputText;
+  document.getElementById('copyContainer').style.display = 'block';
+}
+
+
+
+
+
+
+    // Copy to clipboard function
+    function copyOutput() {
+      const outputElement = document.getElementById('output');
+      const range = document.createRange();
+      range.selectNodeContents(outputElement);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          alert('Copied! Please paste into your ServiceNow Ticket!');
+        } else {
+          alert('Copy command was unsuccessful. Try manually copying.');
+        }
+      } catch (err) {
+        alert('Copy not supported in this browser.');
+      }
+      selection.removeAllRanges();
+    }
+  </script>
+
+</body>
+</html>
+
+
+
+
